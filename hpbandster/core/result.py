@@ -504,6 +504,7 @@ class Result(object):
 		all_configs = []
 		all_losses = []
 		all_tests = []
+		run_time = []
 		tests = False
 
 		for r in all_runs:
@@ -518,11 +519,15 @@ class Result(object):
 				tests = True
 				all_tests.append(r.info['test_loss'])
 			
+			run_time.append(r.time_stamps['finished'] - r.time_stamps['submitted'])
 			#df_x = df_x.append(config, ignore_index=True)
 			#df_y = df_y.append({'loss': r.loss}, ignore_index=True)
 		
 		df_X = pd.DataFrame(all_configs)
 		df_y = pd.DataFrame(all_losses)
+
+
+		df_X['run_time'] = run_time
 
 		if tests:
 			df_X['test_loss'] = all_tests
