@@ -503,6 +503,8 @@ class Result(object):
 
 		all_configs = []
 		all_losses = []
+		all_tests = []
+		tests = False
 
 		for r in all_runs:
 			if r.loss is None: continue
@@ -512,12 +514,18 @@ class Result(object):
 
 			all_configs.append(config)
 			all_losses.append({'loss': r.loss})
+			if 'test_loss' in r.info:
+				tests = True
+				all_tests.append(r.info['test_loss'])
 			
 			#df_x = df_x.append(config, ignore_index=True)
 			#df_y = df_y.append({'loss': r.loss}, ignore_index=True)
 		
 		df_X = pd.DataFrame(all_configs)
 		df_y = pd.DataFrame(all_losses)
+
+		if tests:
+			df_X['test_loss'] = all_tests
 
 		return(df_X, df_y)
 
